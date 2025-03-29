@@ -73,33 +73,33 @@ class ProcessFileUploadJob implements ShouldQueue
         error_log("file path".$filePath);
 
         // // Ensure the file exists
-        // if ($this->checkFileExistsOnS3($filePath)) {
-        //     $output = null;
-        //     $resultCode = null;
+        if ($this->checkFileExistsOnS3($filePath)) {
+            $output = null;
+            $resultCode = null;
 
-        //     // Execute the clamscan command
-        //     exec("clamscan {$filePath}", $output, $resultCode);
+            // Execute the clamscan command
+            exec("clamscan {$filePath}", $output, $resultCode);
 
-        //     // Check the result code: 0 means no virus found, non-zero means virus detected
-        //     if ($resultCode !== 0) {
-        //         // If a virus is found, log it and throw an exception
-        //         Log::error('Virus detected in file', [
-        //             'file_id' => $this->file->id,
-        //             'file_name' => $this->file->name,
-        //             'result' => implode("\n", $output)
-        //         ]);
+            // Check the result code: 0 means no virus found, non-zero means virus detected
+            if ($resultCode !== 0) {
+                // If a virus is found, log it and throw an exception
+                Log::error('Virus detected in file', [
+                    'file_id' => $this->file->id,
+                    'file_name' => $this->file->name,
+                    'result' => implode("\n", $output)
+                ]);
 
-        //         // Optionally, you can delete the file or take other actions
-        //         throw new \Exception('Virus detected in the file');
-        //     } else {
-        //         Log::info('No virus found in file', [
-        //             'file_id' => $this->file->id,
-        //             'file_name' => $this->file->name
-        //         ]);
-        //     }
-        // } else {
-        //     throw new \Exception('File does not exist for scanning');
-        // }
+                // Optionally, you can delete the file or take other actions
+                throw new \Exception('Virus detected in the file');
+            } else {
+                Log::info('No virus found in file', [
+                    'file_id' => $this->file->id,
+                    'file_name' => $this->file->name
+                ]);
+            }
+        } else {
+            throw new \Exception('File does not exist for scanning');
+        }
     }
 
     /**
