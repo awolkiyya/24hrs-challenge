@@ -118,9 +118,7 @@ AWS Secrets Manager: Securely stores sensitive information, such as AWS keys and
 Locally
 To run the queue worker locally, use:
 
-bash
-Copy
-Edit
+
 php artisan queue:work --tries=3
 In AWS
 Set QUEUE_CONNECTION=sqs in .env.
@@ -129,9 +127,6 @@ Configure AWS SQS in config/queue.php.
 
 Start the queue worker on AWS:
 
-bash
-Copy
-Edit
 php artisan queue:work --queue=default
 📧 Email Notifications
 After a successful file upload, an email will be sent to the uploader with the following details:
