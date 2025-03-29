@@ -30,7 +30,7 @@ public function getPresignedUrl(Request $request)
                $filePath = "tenants/{$tenantId}/uploads/" . $fileName;
 
 
-              $bucket = env('AWS_BUCKET','ghioonlaravelbucket');
+              $bucket = env('AWS_BUCKET');
               $region = env('AWS_DEFAULT_REGION', 'us-east-1');
 
               // Initialize S3 Client
@@ -38,8 +38,8 @@ public function getPresignedUrl(Request $request)
                      'version' => 'latest',
                      'region' => $region,
                      'credentials' => [
-                     'key' => env('AWS_ACCESS_KEY_ID','AKIAWUAJFP3KTZWW7UDI'),
-                     'secret' => env('AWS_SECRET_ACCESS_KEY','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'),
+                     'key' => env('AWS_ACCESS_KEY_ID',),
+                     'secret' => env('AWS_SECRET_ACCESS_KEY',),
                      ],
               ]);
 
