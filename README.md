@@ -148,7 +148,7 @@ This is done using Amazon SES for reliable and cost-effective email delivery.
 All application logs, including errors and critical events, are sent to AWS CloudWatch for real-time monitoring and analysis.
 
 📞 Support
-For issues or support, feel free to reach out via email at support@filesharing.com or open an issue on the project’s GitHub repository.
+For issues or support, feel free to reach out via email at awolabdulbaasit143@gmail.com or open an issue on the project’s GitHub repository.
 
 © 2025 Tenanet File Sharing
 You can copy this content into a file named `README.md` to use it in your project. Let me know if you need further adjustments!
