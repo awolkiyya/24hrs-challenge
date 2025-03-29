@@ -2,10 +2,10 @@
 
 ## 🖼️ Image List
 
-![File Upload Flow](/assets/email.png)
-![User Dashboard](/assets/uploadingprogress.png)
-![ClamAV Scanning](/assets/email.png)
-![ClamAV Scanning](/assets/SES.png)
+![File Upload Flow](/public/assets/email.png)
+![User Dashboard](/public/assets/uploadingprogress.png)
+![ClamAV Scanning](/public/assets/email.png)
+![ClamAV Scanning](/public/assets/SES.png)
 
 
 A secure file sharing system with malware scanning, cloud storage, and email notifications.
