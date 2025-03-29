@@ -1,4 +1,4 @@
-# Tina Mart Tenanet File Sharing System
+# Tenanet File Sharing System
 
 ## 🖼️ Image List
 ![upload](/public/assets/file.png)
@@ -150,6 +150,6 @@ All application logs, including errors and critical events, are sent to AWS Clou
 📞 Support
 For issues or support, feel free to reach out via email at support@filesharing.com or open an issue on the project’s GitHub repository.
 
-© 2025 Tina Mart Tenanet File Sharing
+© 2025 Tenanet File Sharing
 You can copy this content into a file named `README.md` to use it in your project. Let me know if you need further adjustments!
 
