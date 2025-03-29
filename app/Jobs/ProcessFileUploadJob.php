@@ -223,16 +223,16 @@ public function failed(Throwable $exception)
 
     public function checkFileExistsOnS3($filePath)
     {
-        $bucket = env('AWS_BUCKET','ghioonlaravelbucket');
-        $region = env('AWS_DEFAULT_REGION', 'us-east-1');
+        $bucket = env('AWS_BUCKET');
+        $region = env('AWS_DEFAULT_REGION',);
 
         // Initialize S3 Client
         $s3Client = new S3Client([
             'version' => 'latest',
             'region' => $region,
             'credentials' => [
-            'key' => env('AWS_ACCESS_KEY_ID','AKIAWUAJFP3KTZWW7UDI'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY','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'),
+            'key' => env('AWS_ACCESS_KEY_ID',),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
             ],
         ]);
 

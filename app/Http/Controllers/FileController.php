@@ -31,7 +31,7 @@ public function getPresignedUrl(Request $request)
 
 
               $bucket = env('AWS_BUCKET');
-              $region = env('AWS_DEFAULT_REGION', 'us-east-1');
+              $region = env('AWS_DEFAULT_REGION');
 
               // Initialize S3 Client
               $s3 = new S3Client([
