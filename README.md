@@ -1,6 +1,12 @@
 # Tina Mart Tenanet File Sharing System
 
-![Architecture Diagram](https://via.placeholder.com/600x200?text=Architecture+Diagram) <!-- Replace with actual diagram -->
+## 🖼️ Image List
+
+![File Upload Flow](http://127.0.0.1:8000/assets/email.png)
+![User Dashboard](http://127.0.0.1:8000/assets/uploadingprogress.png)
+![ClamAV Scanning](http://127.0.0.1:8000/assets/email.png)
+![ClamAV Scanning](http://127.0.0.1:8000/assets/SES.png)
+
 
 A secure file sharing system with malware scanning, cloud storage, and email notifications.
 
