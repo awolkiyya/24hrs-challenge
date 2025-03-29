@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->string('tenant_id');  // Change to string to match tenants.id
+            $table->uuid('tenant_id'); // Reference to tenant's UUID
             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

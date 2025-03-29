@@ -124,17 +124,19 @@ return [
         ],
         'cloudwatch' => [
             'driver' => 'monolog',
-            'handler' => \MaxBanton\Cwh\CloudWatchHandler::class,
+            'handler' => MaxBanton\Cwh\CloudWatchHandler::class,
             'handler_with' => [
-                'log_group' => 'laravel-logs', // Log Group name in CloudWatch
-                'log_stream' => 'app', // Log Stream name (you can dynamically set this if needed)
+                'log_group' => env('CLOUDWATCH_LOG_GROUP', 'laravel-logs'),
+                'log_stream' => env('CLOUDWATCH_LOG_STREAM', 'app'),
                 'aws_credentials' => [
-                    'key' => env('AWS_ACCESS_KEY_ID'),
+                    'key'    => env('AWS_ACCESS_KEY_ID'),
                     'secret' => env('AWS_SECRET_ACCESS_KEY'),
                     'region' => env('AWS_DEFAULT_REGION'),
-                ]
-            ]
-        ],
+                ],
+                'batch_size' => 50, // Optional: Number of log events to send in a batch
+                'retention' => env('CLOUDWATCH_RETENTION', 30), // Optional: Log retention period (in days)
+            ],
+        ],       
 
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),

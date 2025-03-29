@@ -1,67 +1,139 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Tina Mart Tenanet File Sharing
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📌 Overview
 
-## About Laravel
+Tina Mart Tenanet is a secure file-sharing platform that enables users to upload, scan, and download files. The system integrates ClamAV for malware scanning, AWS for cloud storage, and queue processing for efficient file handling.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Setup Instructions
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Prerequisites
 
-## Learning Laravel
+- **Homebrew** (for macOS users)
+- **PHP 8+**
+- **Composer** (PHP dependency manager)
+- **MySQL** (or compatible database)
+- **Redis** (for queue management)
+- **AWS CLI** (if using AWS services)
+- **Supervisor** (for queue worker management in production)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1️⃣ Install Dependencies
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+brew install clamav redis mysql php composer
+composer install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 2️⃣ Configure ClamAV
 
-## Laravel Sponsors
+```bash
+sudo cp /opt/homebrew/etc/clamav/freshclam.conf.sample /opt/homebrew/etc/clamav/freshclam.conf
+nano /opt/homebrew/etc/clamav/freshclam.conf
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**Remove the ****`Example`**** line**, then run:
 
-### Premium Partners
+```bash
+sudo mkdir -p /opt/homebrew/var/lib/clamav
+sudo chown -R $(whoami) /opt/homebrew/var/lib/clamav
+freshclam
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 3️⃣ Set Up Environment
 
-## Contributing
+Copy the `.env.example` and update configurations:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+cp .env.example .env
+nano .env
+```
 
-## Code of Conduct
+Set the following:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```ini
+DB_DATABASE=your_database
+DB_USERNAME=your_user
+DB_PASSWORD=your_password
+AWS_ACCESS_KEY_ID=your_key
+AWS_SECRET_ACCESS_KEY=your_secret
+QUEUE_CONNECTION=redis
+```
 
-## Security Vulnerabilities
+### 4️⃣ Run Migrations
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan migrate --seed
+```
 
-## License
+### 5️⃣ Start Services
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# 24hrs-challenge
+```bash
+php artisan serve &
+redis-server &
+supervisorctl start all # (for production queue handling)
+```
+
+### 6️⃣ Process Queues
+
+```bash
+php artisan queue:work
+```
+
+---
+
+## 🏗️ Architecture Diagram
+
+```
++------------+        +------------+        +------------+
+|  Frontend  | -----> |  Backend   | -----> |   AWS S3   |
++------------+        +------------+        +------------+
+                               |
+                               v
+                          +------------+
+                          |  ClamAV    |
+                          +------------+
+```
+
+---
+
+## 🌩️ AWS Services Used
+
+1. **AWS S3** – Stores uploaded files securely.
+2. **AWS Lambda** – Triggers for scanning new uploads (optional).
+3. **AWS SQS** – Manages queue processing.
+4. **AWS CloudWatch** – Monitors system health and logs.
+
+---
+
+## 🔄 Running Queues
+
+### Locally
+
+```bash
+php artisan queue:work --tries=3
+```
+
+### In AWS
+
+Using **Amazon SQS**:
+
+1. Set `QUEUE_CONNECTION=sqs` in `.env`.
+2. Configure SQS in `config/queue.php`.
+3. Start queue worker:
+   ```bash
+   php artisan queue:work --queue=default
+   ```
+
+---
+
+## 📞 Support
+
+For issues, contact **[support@filesharing.com](mailto\:support@filesharing.com)** or open a GitHub issue.
+
+---
+
+© 2025 Tina Mart Tenanet File Sharing
+
+give me readme full file
+

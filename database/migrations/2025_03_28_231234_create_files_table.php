@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('path'); // Path to the file (e.g., S3 path)
             $table->integer('size'); // File size in bytes
             $table->string('mime_type'); // MIME type of the file
-            
+            // Add the 'status' enum column with predefined values
+            $table->enum('status', ['uploaded', 'processing', 'completed', 'failed'])->default('uploaded'); // Default status is 'uploaded'
             $table->unsignedBigInteger('uploaded_by'); // uploaded_by as unsignedBigInteger to match users.id
             $table->foreign('uploaded_by')->references('id')->on('users')->onDelete('cascade'); // Foreign key to the users table
         
