@@ -30,7 +30,7 @@ public function getPresignedUrl(Request $request)
                $filePath = "tenants/{$tenantId}/uploads/" . $fileName;
 
 
-              $bucket = env('AWS_BUCKET');
+              $bucket = env('AWS_BUCKET',);
               $region = env('AWS_DEFAULT_REGION');
 
               // Initialize S3 Client
@@ -38,8 +38,8 @@ public function getPresignedUrl(Request $request)
                      'version' => 'latest',
                      'region' => $region,
                      'credentials' => [
-                     'key' => env('AWS_ACCESS_KEY_ID',),
-                     'secret' => env('AWS_SECRET_ACCESS_KEY',),
+                     'key' => env('AWS_ACCESS_KEY_ID'),
+                     'secret' => env('AWS_SECRET_ACCESS_KEY'),
                      ],
               ]);
 

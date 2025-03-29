@@ -69,28 +69,16 @@ class ProcessFileUploadJob implements ShouldQueue
      */
     private function performVirusScan()
     {
-        // Get S3 disk instance
-        // $s3 = Storage::disk('s3');
-    
-        // // Ensure you have the correct file path, for example using 'path' or 'file_name'
-        // $filePath = $this->file->path; // Assuming 'path' holds the correct file path 
-        // error_log("file path". $filePath);
-        // error_log("is file exist". $s3->exists($filePath));
-        // // Base URL you want to exclude
-        // $baseUrl = 'https://ghioonlaravelbucket.s3.amazonaws.com/';
-
-        // // Strip the base URL from the full URL to get the relative path
-        // $filePath = str_replace($baseUrl, '', $filePath);
-        // error_log("is file exist". $s3->exists($filePath));
-
+        $filePath = $this->file->path;  // The file path to be scanned
+        error_log("file path".$filePath);
 
         // // Ensure the file exists
-        // if ($s3->exists($filePath)) {
+        // if ($this->checkFileExistsOnS3($filePath)) {
         //     $output = null;
         //     $resultCode = null;
 
         //     // Execute the clamscan command
-        //     exec("clamscan {$this->file->path}", $output, $resultCode);
+        //     exec("clamscan {$filePath}", $output, $resultCode);
 
         //     // Check the result code: 0 means no virus found, non-zero means virus detected
         //     if ($resultCode !== 0) {
@@ -192,16 +180,20 @@ public function failed(Throwable $exception)
     
             // Ensure you have the correct file path, for example using 'path' or 'file_name'
             $filePath = $this->file->path; // Assuming 'path' holds the correct file path in S3
-            // Base URL you want to exclude
-            $baseUrl = 'https://ghioonlaravelbucket.s3.amazonaws.com/';
+             // Get the relative file path directly from the File model
+        $filePath = $this->file->path;
 
-            // Strip the base URL from the full URL to get the relative path
-            $filePath = str_replace($baseUrl, '', $filePath);
-            error_log("file path". $filePath);
-            
+        // Ensure it's a relative path (strip base URL if accidentally stored)
+        $parsedUrl = parse_url($filePath);
+        
+        if (isset($parsedUrl['path'])) {
+            $filePath = ltrim($parsedUrl['path'], '/');
+        }
+
+        error_log("Relative file path: " . $filePath);
     
             // Check if the file exists in S3 before generating the URL
-            if ($s3->exists($filePath)) {
+            if ($this->checkFileExistsOnS3($filePath)) {
                 // Generate temporary download URL that expires in 5 minutes
                 $downloadUrl = $s3->temporaryUrl(
                     $filePath, now()->addMinutes(5) // Expiration time for the URL
@@ -216,14 +208,14 @@ public function failed(Throwable $exception)
         }
     
         // If file doesn't exist or user doesn't have access
-        return null;
+        return 'File not found or access denied';
     }
     
 
 
     public function checkFileExistsOnS3($filePath)
     {
-        $bucket = env('AWS_BUCKET');
+        $bucket = env('AWS_BUCKET',);
         $region = env('AWS_DEFAULT_REGION',);
 
         // Initialize S3 Client
